@@ -1,0 +1,10 @@
+{
+    "name":        "zhibek/crowdmap-client",
+    "type":        "library",
+    "homepage":    "https://github.com/zhibek/crowdmap-client",
+    "autoload": {
+        "psr-4": {
+            "Zhibek\\CrowdmapClient\\": "src"
+        }
+    }
+}
