@@ -5,12 +5,6 @@ namespace Zhibek\CrowdmapClient;
 class Client
 {
 
-    const API_SCHEME = 'https';
-
-    const API_HOST = 'api.crowdmap.com';
-
-    const API_PATH = '/v1';
-
     /**
      * @var string
      */
@@ -20,6 +14,22 @@ class Client
      * @var string
      */
     protected $_privateKey;
+
+    /**
+     * @var string
+     */
+    protected $_apiScheme;
+
+    /**
+     * @var string
+     */
+    protected $_apiHost;
+
+    /**
+     * @var string
+     */
+    protected $_apiPath;
+
 
     /**
      * @var Cache
@@ -56,10 +66,13 @@ class Client
      */
     protected $_sessionKey;
 
-    public function __construct($publicKey, $privateKey, $cache = null, $logOptions = null, $profiler = 'Zhibek\CrowdmapClient\Profiler')
+    public function __construct($crowdmapConfig, $cache = null, $logOptions = null, $profiler = 'Zhibek\CrowdmapClient\Profiler')
     {
-        $this->_publicKey = $publicKey;
-        $this->_privateKey = $privateKey;
+        $this->_publicKey = $crowdmapConfig->public_key;
+        $this->_privateKey = $crowdmapConfig->private_key;
+        $this->_apiHost = $crowdmapConfig->api_host;
+        $this->_apiScheme = $crowdmapConfig->api_scheme;
+        $this->_apiPath = $crowdmapConfig->api_path;
         $this->_cache = $cache;
 
         if ($logOptions) {
@@ -78,7 +91,7 @@ class Client
 
     protected function _request($method, $resource, $data = array(), $files = array())
     {
-        $url = self::API_SCHEME . '://' . self::API_HOST . self::API_PATH . $resource;
+        $url = $this->_apiScheme . '://' . $this->_apiHost . $this->_apiPath . $resource;
         $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Mozilla/5.0 Crowdmap Client';
         $headers = array(
             'User-Agent: ' . $userAgent,
